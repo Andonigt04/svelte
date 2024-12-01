@@ -55,8 +55,15 @@
     return () => clearInterval(interval);
   });
 </script>
-
-<div class="peer-checked:bg-gray-900 justify-center">
+<style>
+  html {
+    background-color: #ffff;
+  }
+  html.dark {
+    background-color: #0000;
+  }
+</style>
+<div class="justify-center bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
   <Header {links} />
   <main class="min-h-lvh mx-72 justify-center overflow-hidden">
     <section class="my-10">
@@ -72,11 +79,7 @@
                 <div>
                   <picture>
                     <source srcset={slider.img} media="(min-width: 640px)" />
-                    <img
-                      class="min-w-full"
-                      src={slider.img}
-                      alt={slider.img}
-                    />
+                    <img class="min-w-full" src={slider.img || 'default-image.jpg'} alt={slider.img || 'default-image'} />
                   </picture>
                 </div></a
               >

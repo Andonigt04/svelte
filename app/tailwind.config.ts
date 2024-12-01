@@ -7,7 +7,14 @@ export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
 
   theme: {
-    extend: {}
+    extend: {
+      colors: {
+        'background-light': '#fff',
+        'background-dark': '#1a202c',
+        'text-light': '#000',
+        'text-dark': '#e2e8f0',
+      },
+    }
   },
 
   plugins: [typography, forms, containerQueries]
