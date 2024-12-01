@@ -63,7 +63,7 @@
     background-color: #0000;
   }
 </style>
-<div class="justify-center bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+<div class="justify-center bg-background-light text-text-light dark:text-text-dark dark:bg-background-dark">
   <Header {links} />
   <main class="min-h-lvh mx-72 justify-center overflow-hidden">
     <section class="my-10">
