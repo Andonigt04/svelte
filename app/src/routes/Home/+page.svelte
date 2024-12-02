@@ -55,17 +55,12 @@
     return () => clearInterval(interval);
   });
 </script>
-<style>
-  html {
-    background-color: #ffff;
-  }
-  html.dark {
-    background-color: #0000;
-  }
-</style>
-<div class="justify-center bg-background-light text-text-light dark:text-text-dark dark:bg-background-dark">
+
+<div
+  class="justify-center bg-background-light light:bg-custom dark:text-text-dark dark:bg-background-dark"
+>
   <Header {links} />
-  <main class="min-h-lvh mx-72 justify-center overflow-hidden">
+  <main class="min-h-lvh lg:mx-72 md:mx-32 justify-center overflow-hidden">
     <section class="my-10">
       <div class="flex flex-col items-center">
         <ul
@@ -79,7 +74,11 @@
                 <div>
                   <picture>
                     <source srcset={slider.img} media="(min-width: 640px)" />
-                    <img class="min-w-full" src={slider.img || 'default-image.jpg'} alt={slider.img || 'default-image'} />
+                    <img
+                      class="min-w-full"
+                      src={slider.img || "default-image.jpg"}
+                      alt={slider.img || "default-image"}
+                    />
                   </picture>
                 </div></a
               >
@@ -130,7 +129,7 @@
               </div>
             </li>
           {/each}
-          <div class="flex absolute h-52 w-4/6 mt-10 justify-between">
+          <div class="flex absolute h-52 w-4/6 mt-10 justify-between max-lg:hidden">
             {#if checkArrows(models3d_currentSlide, models3d_totalSlides, -1)}
               <button
                 on:click={() =>
@@ -200,7 +199,7 @@
               </div>
             </li>
           {/each}
-          <div class="flex absolute h-52 w-4/6 mt-10 justify-between">
+          <div class="flex absolute h-52 w-4/6 mt-10 justify-between  max-lg:hidden">
             {#if checkArrows(games_currentSlide, games_totalSlides, -1)}
               <button
                 on:click={() =>

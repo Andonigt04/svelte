@@ -14,8 +14,9 @@ export default {
         'text-light': '#000',
         'text-dark': '#e2e8f0',
       },
-    }
-  },
+    },
 
-  plugins: [typography, forms, containerQueries]
+  },
+  darkMode: 'class',
+  plugins: [typography, forms, containerQueries],
 } satisfies Config;
