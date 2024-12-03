@@ -43,8 +43,8 @@
   function showMenu() {
     // @ts-ignore
     const header = document.querySelector("header");
-    const menu = document.querySelector("nav");
-    const menuUl = document.querySelector("nav ul");
+    const menu = document.querySelector("aside nav");
+    const menuUl = document.querySelector("aside nav ul");
 
     isShowed = !isShowed;
 
@@ -62,10 +62,10 @@
   }
 </script>
 
-<header class="border-b-2 text-center justify-between flex flex-row mb-8 p-4">
-  <div class="flex flex-row justify-between items-center">
-    <h1>APP</h1>
-    <div class="md:hidden">
+<header class="border-b-2 text-center justify-between flex-row mb-8 p-4 block md:flex">
+  <div class="flex flex-row items-center justify-between right-0">
+    <h1 class="float-left left-0">APP</h1>
+    <div class="md:hidden right-0 float-right">
       <button on:click={showMenu} type="button">
         <picture>
           <source media="(max-width: 128px)" srcset={menuImg} />
@@ -100,3 +100,30 @@
     </div>
   </nav>
 </header>
+<aside class="lg:hidden flex flex-col items-center z-10 fixed duration-200 ease-in -translate-x-1/2 transform transition shown:translate-x-0">
+  <nav class="flex flex-row items-center peer-checked:c-white max-md:hidden bg-white dark:bg-background-dark h-screen px-5">
+    <ul class="flex">
+      {#each links as link}
+        <li class="mx-2"><a href={link.href}>{link.text}</a></li>
+      {/each}
+    </ul>
+    <div class="toggle-container">
+      <label for="toggle" class="flex items-center cursor-pointer">
+        <div class="relative">
+          <input
+            on:change={toggleTheme}
+            type="checkbox"
+            id="toggle"
+            class="sr-only peer"
+          />
+          <div
+            class="w-12 h-6 bg-gray-500 rounded-full peer-checked:bg-blue-400"
+          ></div>
+          <div
+            class="dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full peer-checked:translate-x-6 transition-transform"
+          ></div>
+        </div>
+      </label>
+    </div>
+  </nav>
+</aside>
