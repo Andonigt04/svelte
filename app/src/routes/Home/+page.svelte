@@ -23,7 +23,7 @@
   let games_currentSlide = 0;
   const games_totalSlides = games.length;
 
-  let container;
+  let containers = [];
 
   function checkArrows(curr, totslid, where) {
     const slideTo = curr + where;
@@ -54,7 +54,7 @@
   onMount(() => {
     models3d.forEach((model, idx) => {
       if (containers[idx]) {
-        loadModel(containers[idx], model.href);
+        loadModel(containers[idx], model.src);
       }
     });
 
@@ -68,9 +68,10 @@
   function loadModel(container, src) {
     if (!container || container.loaded) return;
 
+    console.log("Cargando modelo:", src); // Depuración: Verificar ruta
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
-      75,
+      25,
       container.clientWidth / container.clientHeight,
       0.1,
       1000
@@ -88,11 +89,13 @@
     loader.load(
       src,
       (geometry) => {
+        console.log("Modelo cargado:", src); // Confirmar que el modelo fue cargado
+        console.log(geometry); // Verificar la geometría
+
         const material = new THREE.MeshStandardMaterial({ color: 0x0055ff });
         const mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
 
-        // Centrar y escalar el modelo
         geometry.computeBoundingBox();
         const center = geometry.boundingBox.getCenter(new THREE.Vector3());
         mesh.geometry.translate(-center.x, -center.y, -center.z);
@@ -103,7 +106,9 @@
         render();
       },
       undefined,
-      (error) => console.error("Error al cargar el modelo STL:", error)
+      (error) => {
+        console.error("Error al cargar el modelo STL:", error);
+      }
     );
 
     camera.position.set(0, 0, 3);
@@ -180,17 +185,17 @@
               style="transform: translateX({-models3d_currentSlide *
                 100}%); transition-timing-function: ease; transition-duration: .8s;"
             >
-              <div>
-                <h3 class="mb-4">{model3d.name}</h3>
-                <div
-                  class="w-96 h-52 rounded-2xl border-2 flex items-center justify-center"
-                >
-                  <div
-                    class="model-container w-full h-full"
-                    bind:this={containers[idx]}
-                  ></div>
+              <a href="/3DModels/{idx}">
+                <div>
+                  <div class="w-96 h-52 flex items-center justify-center">
+                    <div
+                      class="model-container w-full h-full rounded-2xl"
+                      bind:this={containers[idx]}
+                    ></div>
+                  </div>
+                  <h3 class="mb-4">{model3d.name}</h3>
                 </div>
-              </div>
+              </a>
             </li>
           {/each}
           <div
