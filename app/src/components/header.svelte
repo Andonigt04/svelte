@@ -62,7 +62,7 @@
   }
 </script>
 
-<header class="border-b-2 text-center justify-between flex-row mb-8 p-4 block md:flex">
+<header class="border-b-2 text-center justify-between md:flex-row mb-8 p-4 block md:flex">
   <div class="flex flex-row items-center justify-between right-0">
     <h1 class="float-left left-0">APP</h1>
     <div class="md:hidden right-0 float-right">
@@ -100,7 +100,7 @@
     </div>
   </nav>
 </header>
-<aside class="lg:hidden flex flex-col items-center z-10 fixed duration-200 ease-in -translate-x-1/2 transform transition shown:translate-x-0">
+<aside class="md:hidden flex flex-col items-center z-10 fixed duration-200 ease-in -translate-x-1/2 transform transition shown:translate-x-0">
   <nav class="flex flex-row items-center peer-checked:c-white max-md:hidden bg-white dark:bg-background-dark h-screen px-5">
     <ul class="flex">
       {#each links as link}

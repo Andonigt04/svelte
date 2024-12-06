@@ -2,6 +2,8 @@
   // @ts-nocheck
 
   import { onMount } from "svelte";
+  import * as THREE from "three";
+  import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
   import { links, models3d, games, main_slider } from "@components/utils.js";
   import Header from "@components/header.svelte";
   import Footer from "@components/footer.svelte";
@@ -20,6 +22,8 @@
 
   let games_currentSlide = 0;
   const games_totalSlides = games.length;
+
+  let container;
 
   function checkArrows(curr, totslid, where) {
     const slideTo = curr + where;
@@ -48,12 +52,70 @@
   }
 
   onMount(() => {
+    models3d.forEach((model, idx) => {
+      if (containers[idx]) {
+        loadModel(containers[idx], model.href);
+      }
+    });
+
     const interval = setInterval(() => {
       slide();
     }, 5000);
 
     return () => clearInterval(interval);
   });
+
+  function loadModel(container, src) {
+    if (!container || container.loaded) return;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      container.clientWidth / container.clientHeight,
+      0.1,
+      1000
+    );
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+
+    const ambientLight = new THREE.AmbientLight(0x606060);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(1, 1, 1).normalize();
+    scene.add(ambientLight, directionalLight);
+
+    const loader = new STLLoader();
+    loader.load(
+      src,
+      (geometry) => {
+        const material = new THREE.MeshStandardMaterial({ color: 0x0055ff });
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        // Centrar y escalar el modelo
+        geometry.computeBoundingBox();
+        const center = geometry.boundingBox.getCenter(new THREE.Vector3());
+        mesh.geometry.translate(-center.x, -center.y, -center.z);
+        mesh.scale.setScalar(
+          1 / geometry.boundingBox.getSize(new THREE.Vector3()).length()
+        );
+
+        render();
+      },
+      undefined,
+      (error) => console.error("Error al cargar el modelo STL:", error)
+    );
+
+    camera.position.set(0, 0, 3);
+
+    const render = () => {
+      requestAnimationFrame(render);
+      renderer.render(scene, camera);
+    };
+
+    render();
+    container.loaded = true;
+  }
 </script>
 
 <div
@@ -112,7 +174,7 @@
       </a>
       <div class="items-center grid">
         <ul class="{modelcss} slider">
-          {#each models3d as model3d}
+          {#each models3d as model3d, idx}
             <li
               class="mx-5 slide"
               style="transform: translateX({-models3d_currentSlide *
@@ -120,16 +182,20 @@
             >
               <div>
                 <h3 class="mb-4">{model3d.name}</h3>
-                <div class="w-96 h-52 rounded-2xl border-2">
-                  <picture>
-                    <source srcset={""} media="(min-width: 640px)" />
-                    <img src={""} alt="img" class={""} />
-                  </picture>
+                <div
+                  class="w-96 h-52 rounded-2xl border-2 flex items-center justify-center"
+                >
+                  <div
+                    class="model-container w-full h-full"
+                    bind:this={containers[idx]}
+                  ></div>
                 </div>
               </div>
             </li>
           {/each}
-          <div class="flex absolute h-52 w-4/6 mt-10 justify-between max-lg:hidden">
+          <div
+            class="flex absolute h-52 w-4/6 mt-10 justify-between max-lg:hidden"
+          >
             {#if checkArrows(models3d_currentSlide, models3d_totalSlides, -1)}
               <button
                 on:click={() =>
@@ -199,7 +265,9 @@
               </div>
             </li>
           {/each}
-          <div class="flex absolute h-52 w-4/6 mt-10 justify-between  max-lg:hidden">
+          <div
+            class="flex absolute h-52 w-4/6 mt-10 justify-between max-lg:hidden"
+          >
             {#if checkArrows(games_currentSlide, games_totalSlides, -1)}
               <button
                 on:click={() =>

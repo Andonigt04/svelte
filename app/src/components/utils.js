@@ -29,8 +29,9 @@ export const models3d = [
   {
     name: "lkjk",
     description: "",
-    img: "",
-    href: "",
+    href: "/src/models3d/Lockheed_Martin_F-22_Raptor_export.stl",
+    container: null,
+    loaded: false,
   },
   {
     name: "ljkljlk",
@@ -41,8 +42,9 @@ export const models3d = [
   {
     name: "lkjlkj",
     description: "",
-    img: "",
     href: "",
+    container: null,
+    loaded: false,
   },
 ];
 
